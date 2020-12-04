@@ -17,8 +17,8 @@ fn main() -> io::Result<()> {
   let nfa = Nfa::from_re(&re);
   if let Some(path) = m.value_of("nfa") { fs::write(path, nfa.print_dot())?; }
   let dfa = Dfa::from_nfa(&nfa, 0);
-  if let Some(path) = m.value_of("raw_dfa") { fs::write(path, dfa.print_dot())?; }
+  if let Some(path) = m.value_of("raw_dfa") { fs::write(path, dfa.print_matrix())?; }
   let dfa = dfa.minimize();
-  if let Some(path) = m.value_of("dfa") { fs::write(path, dfa.print_dot())?; }
+  if let Some(path) = m.value_of("dfa") { fs::write(path, dfa.print_matrix())?; }
   Ok(())
 }

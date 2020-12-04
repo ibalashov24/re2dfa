@@ -3,6 +3,7 @@ pub mod re;
 pub mod nfa;
 pub mod dfa;
 pub mod print;
+pub mod matrix;
 
 pub use compress::*;
 pub use re::*;
