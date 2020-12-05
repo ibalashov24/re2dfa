@@ -8,7 +8,7 @@ fn main() -> io::Result<()> {
     .arg(Arg::with_name("nfa").long("nfa").takes_value(true))
     .arg(Arg::with_name("raw_dfa").long("raw_dfa").takes_value(true).help("show the dfa directly converted from nfa"))
     .arg(Arg::with_name("dfa").long("dfa").takes_value(true).help("show the minimized dfa as COO"))
-    .arg(Arg::with_name("dfa_dense").takes_value(true).help("show the minimized dfa as adjacency matrix"))
+    .arg(Arg::with_name("dfa_dense").long("dfa_dense").takes_value(true).help("show the minimized dfa as adjacency matrix"))
     .get_matches();
   let input = m.value_of("input").unwrap();
   let re = parse(input).unwrap_or_else(|e| {
