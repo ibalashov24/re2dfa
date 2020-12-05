@@ -1,6 +1,7 @@
 use crate::Dfa;
 use std::collections::HashMap;
 use std::fmt::Write;
+use std::char;
 
 impl Dfa {
     /// Prints DFA as adjacency matrix *state x char*.
@@ -18,12 +19,12 @@ impl Dfa {
             // 255 is byte's (and ASCII's) upper border
             for symbol in 0u8..=255 {
                 if let Some(out) = matrix_row.get(&symbol) {
-                    let _ = write!(result_str, r#"{}"#, out); 
+                    let _ = write!(result_str, r#"{} "#, out); 
                 } else {
-                    let _ = write!(result_str, "0");
+                    let _ = write!(result_str, "0 ");
                 }
-                let _ = writeln!(result_str);
             }
+            let _ = writeln!(result_str);
         }
 
        result_str 
@@ -37,7 +38,12 @@ impl Dfa {
             
         for (idx, node) in self.nodes.iter().enumerate() {
            for (&trans_symbol, &out) in &node.1 {
-               let _ = writeln!(result_str, r#"{} {} {}"#, idx, trans_symbol, out);  
+               let _ = writeln!(
+                   result_str, 
+                   r#"{} {} {}"#, 
+                    idx, 
+                    char::from_u32(trans_symbol as u32).unwrap(), 
+                    out);  
            }
         }
 
