@@ -1,27 +1,46 @@
-use crate::{Dfa};
-use std::fmt::Write;
+use crate::Dfa;
 use std::collections::HashMap;
+use std::fmt::Write;
 
 impl Dfa {
-    pub fn print_matrix(&self) -> String {
-        let mut s = String::new();
-        for (idx, node) in self.nodes.iter().enumerate() {
-            let mut outs = HashMap::new();
-            for (&k, &out) in &node.1 {
-                outs.entry(out).or_insert_with(Vec::new).push(k);
+    /// Prints DFA as adjacency matrix *state x char*.
+    /// # Returns
+    /// String containing adjacency matrix.
+    pub fn print_dense_matrix(&self) -> String {
+        let mut result_str = String::new();
+
+        for node in &self.nodes {
+            let mut matrix_row = HashMap::new();
+            for (&trans_symbol, &out) in &node.1 {
+                matrix_row.insert(trans_symbol, out);
             }
 
-            for (out, mut edge) in outs {
-                edge.sort_unstable();
-
-                let trans_char = String::from_utf8(edge).unwrap();
-
-                if let Err(e) = writeln!(s, r#"{} {} {}"#, idx, out, trans_char) {
-                    println!("Writing error: {}", e.to_string());
+            // 255 is byte's (and ASCII's) upper border
+            for symbol in 0u8..=255 {
+                if let Some(out) = matrix_row.get(&symbol) {
+                    let _ = write!(result_str, r#"{}"#, out); 
+                } else {
+                    let _ = write!(result_str, "0");
                 }
+                let _ = writeln!(result_str);
             }
         }
-        
-        s
+
+       result_str 
+    }
+
+    /// Prints DFA as COOrdinate list *(from, symbol, to)*.
+    /// # Returns
+    /// String containing COOrdiante list.
+    pub fn print_coo(&self) -> String {
+        let mut result_str = String::new(); 
+            
+        for (idx, node) in self.nodes.iter().enumerate() {
+           for (&trans_symbol, &out) in &node.1 {
+               let _ = writeln!(result_str, r#"{} {} {}"#, idx, trans_symbol, out);  
+           }
+        }
+
+        result_str
     }
 }
